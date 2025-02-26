@@ -1,18 +1,17 @@
 {
-  "name": "mdn_docs",
+  "name": "demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.config.js",
+    "serve": "webpack serve --config webpack.config.js --open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "express": "^4.21.2",
-    "mdn_docs": "file:pkg"
+    "mdn_docs": "file:../pkg"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^12.0.2",
