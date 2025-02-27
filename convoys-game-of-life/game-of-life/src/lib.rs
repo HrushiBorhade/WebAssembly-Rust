@@ -1,4 +1,6 @@
+use std::fmt;
 use wasm_bindgen::prelude::*;
+
 mod utils;
 // #[wasm_bindgen]
 // extern "C" {
@@ -15,7 +17,7 @@ mod utils;
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum Cell {
     Dead = 0,
-    Alive = 0,
+    Alive = 1,
 }
 
 #[wasm_bindgen]
@@ -40,7 +42,7 @@ impl Universe {
                     continue;
                 }
                 let nrow = (row + delta_row) % self.height;
-                let ncol = (col + delta_col) % self.width;
+                let ncol = (column + delta_col) % self.width;
                 let idx = self.get_index(nrow, ncol);
                 count += self.cells[idx] as u8;
             }
@@ -51,11 +53,11 @@ impl Universe {
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
-        for row in 0..self.height-1 {
-            for col in 0..self.width-1 {
+        for row in 0..self.height - 1 {
+            for col in 0..self.width - 1 {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
-                let live_neighbors = self.live_neighbor_count(row, col);
+                let live_neighbors = self.count_live_neighbours(row, col);
 
                 let next_cell = match (cell, live_neighbors) {
                     // Rule 1: Any live cell with fewer than two live neighbours
@@ -75,9 +77,21 @@ impl Universe {
                 };
 
                 next[idx] = next_cell;
-                }
             }
-            self.cells = next;
         }
+        self.cells = next;
+    }
+}
+
+impl fmt::Display for Universe {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for line in self.cells.as_slice().chunks(self.width as usize) {
+            for &cell in line {
+                let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
+                write!(f, "{}", symbol)?;
+            }
+            write!(f,"\n")?;
+        }
+        Ok(())
     }
 }
