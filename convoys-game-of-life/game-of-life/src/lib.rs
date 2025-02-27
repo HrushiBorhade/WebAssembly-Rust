@@ -1,13 +1,11 @@
-mod utils;
-
 use wasm_bindgen::prelude::*;
-
+mod utils;
 #[wasm_bindgen]
 extern "C" {
-    fn alert(s: &str);
+    pub fn alert(s: &str);
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, game-of-life!");
+pub fn greet(msg: &str) {
+    alert(&format!("{}", msg));
 }
