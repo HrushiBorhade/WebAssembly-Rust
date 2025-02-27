@@ -55,6 +55,16 @@ impl Universe {
         self.width
     }
 
+    pub fn set_width(&mut self, width: u32) {
+        self.width = width;
+        self.cells = (0..width * self.height).map(|_| Cell::Dead).collect();
+    }
+
+    pub fn set_height(&mut self, height: u32) {
+        self.height = height;
+        self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
+    }
+
     pub fn height(&self) -> u32 {
         self.height
     }
@@ -120,6 +130,18 @@ impl Universe {
     }
 }
 
+impl Universe {
+    pub fn get_cells(&self) -> &[Cell] {
+        &self.cells
+    }
+
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        for (row, column) in cells.iter().cloned() {
+            let idx = self.get_index(row, column);
+            self.cells[idx] = Cell::Alive
+        }
+    }
+}
 impl fmt::Display for Universe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for line in self.cells.as_slice().chunks(self.width as usize) {
