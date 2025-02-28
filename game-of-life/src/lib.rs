@@ -29,8 +29,14 @@ pub struct Universe {
 }
 
 #[wasm_bindgen]
+pub fn init_panic_hook() {
+    console_error_panic_hook::set_once();
+}
+
+#[wasm_bindgen]
 impl Universe {
     pub fn new() -> Universe {
+        utils::set_panic_hook();
         let width = 32;
         let height = 32;
 
